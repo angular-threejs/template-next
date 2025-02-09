@@ -9,22 +9,19 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { extend, getLocalState, injectBeforeRender, injectObjectEvents } from 'angular-three';
+import { extend, getInstanceState, injectBeforeRender, injectObjectEvents } from 'angular-three';
 import { NgtsPerspectiveCamera } from 'angular-three-soba/cameras';
 import { NgtsOrbitControls } from 'angular-three-soba/controls';
 import { BoxGeometry, GridHelper, Mesh, MeshBasicMaterial } from 'three';
 
-@Directive({
-  selector: '[cursorPointer]',
-  standalone: true,
-})
+@Directive({ selector: '[cursorPointer]' })
 export class CursorPointer {
   constructor() {
     const document = inject(DOCUMENT);
     const hostElement = inject<ElementRef<Mesh>>(ElementRef);
     const mesh = hostElement.nativeElement;
 
-    const localState = getLocalState(mesh);
+    const localState = getInstanceState(mesh);
     if (!localState) return;
 
     injectObjectEvents(() => mesh, {
@@ -35,6 +32,7 @@ export class CursorPointer {
 }
 
 @Component({
+  selector: 'app-experience',
   template: `
     <ngts-perspective-camera [options]="{ makeDefault: true, position: [-3, 5, 5] }" />
 
