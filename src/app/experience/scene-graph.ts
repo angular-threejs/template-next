@@ -1,16 +1,15 @@
-
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   Directive,
   ElementRef,
   inject,
   signal,
   viewChild,
-  DOCUMENT
 } from '@angular/core';
-import { extend, getInstanceState, injectBeforeRender, injectObjectEvents } from 'angular-three';
+import { beforeRender, extend, getInstanceState, objectEvents } from 'angular-three';
 import { NgtsPerspectiveCamera } from 'angular-three-soba/cameras';
 import { NgtsOrbitControls } from 'angular-three-soba/controls';
 import { BoxGeometry, GridHelper, Mesh, MeshBasicMaterial } from 'three';
@@ -25,7 +24,7 @@ export class CursorPointer {
     const localState = getInstanceState(mesh);
     if (!localState) return;
 
-    injectObjectEvents(() => mesh, {
+    objectEvents(() => mesh, {
       pointerover: () => void (document.body.style.cursor = 'pointer'),
       pointerout: () => void (document.body.style.cursor = 'default'),
     });
@@ -33,7 +32,7 @@ export class CursorPointer {
 }
 
 @Component({
-  selector: 'app-experience',
+  selector: 'app-scene-graph',
   template: `
     <ngts-perspective-camera [options]="{ makeDefault: true, position: [-3, 5, 5] }" />
 
@@ -57,7 +56,7 @@ export class CursorPointer {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CursorPointer, NgtsOrbitControls, NgtsPerspectiveCamera],
 })
-export class Experience {
+export class SceneGraph {
   private meshRef = viewChild.required<ElementRef<Mesh>>('mesh');
 
   protected hovered = signal(false);
@@ -65,7 +64,7 @@ export class Experience {
 
   constructor() {
     extend({ Mesh, BoxGeometry, MeshBasicMaterial, GridHelper });
-    injectBeforeRender(({ delta }) => {
+    beforeRender(({ delta }) => {
       const mesh = this.meshRef().nativeElement;
       mesh.rotation.x += delta;
       mesh.rotation.y += delta;
