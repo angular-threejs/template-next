@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   ChangeDetectionStrategy,
@@ -8,6 +8,7 @@ import {
   inject,
   signal,
   viewChild,
+  DOCUMENT
 } from '@angular/core';
 import { extend, getInstanceState, injectBeforeRender, injectObjectEvents } from 'angular-three';
 import { NgtsPerspectiveCamera } from 'angular-three-soba/cameras';
